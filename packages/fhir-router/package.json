@@ -1,9 +1,8 @@
 {
-  "name": "@medplum/fhir-router",
-  "version": "3.0.1",
-  "description": "Medplum FHIR Router",
+  "name": "@rahulideas2it/fhir-sdc-lib-router",
+  "version": "0.0.0",
+  "description": "FHIR Router",
   "keywords": [
-    "medplum",
     "fhir",
     "healthcare",
     "interoperability",
@@ -17,17 +16,7 @@
     "r4",
     "normative"
   ],
-  "homepage": "https://www.medplum.com/",
-  "bugs": {
-    "url": "https://github.com/medplum/medplum/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/medplum/medplum.git",
-    "directory": "packages/fhir-router"
-  },
   "license": "Apache-2.0",
-  "author": "Medplum <hello@medplum.com>",
   "sideEffects": false,
   "exports": {
     "import": {
@@ -53,9 +42,9 @@
     "test": "jest"
   },
   "dependencies": {
-    "@medplum/core": "*",
-    "@medplum/definitions": "*",
-    "@medplum/fhirtypes": "*",
+    "@medplum/core": "npm:@rahulideas2it/fhir-sdc-lib-core@*",
+    "@medplum/definitions": "npm:@rahulideas2it/fhir-sdc-lib-definitions@*",
+    "@medplum/fhirtypes": "npm:@rahulideas2it/fhir-sdc-lib-fhirtypes@*",
     "dataloader": "2.2.2",
     "graphql": "16.8.1",
     "rfc6902": "5.1.1"

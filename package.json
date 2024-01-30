@@ -9,6 +9,7 @@
   "scripts": {
     "build": "turbo run build --filter=!@medplum/docs",
     "build:all": "turbo run build",
+    "build:core": "turbo run build --filter=@rahulideas2it/fhir-sdc-lib-definitions --filter=@rahulideas2it/fhir-sdc-lib-fhirtypes --filter=@rahulideas2it/fhir-sdc-lib-core --filter=@rahulideas2it/fhir-sdc-lib-mock --filter=@rahulideas2it/fhir-sdc-lib-router --filter=@rahulideas2it/fhir-sdc-lib-react-hooks --filter=@rahulideas2it/fhir-sdc-lib-react",
     "build:fast": "turbo run build --filter=@medplum/app --filter=@medplum/server",
     "clean": "turbo run clean",
     "cyclonedx": "cyclonedx-npm --omit dev --omit optional --omit peer",

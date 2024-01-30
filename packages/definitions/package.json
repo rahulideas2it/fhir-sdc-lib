@@ -1,9 +1,8 @@
 {
-  "name": "@medplum/definitions",
-  "version": "3.0.1",
-  "description": "Medplum Data Definitions",
+  "name": "@rahulideas2it/fhir-sdc-lib-definitions",
+  "version": "0.0.0",
+  "description": "FHIR Data Definitions",
   "keywords": [
-    "medplum",
     "fhir",
     "healthcare",
     "interoperability",
@@ -17,17 +16,7 @@
     "r4",
     "normative"
   ],
-  "homepage": "https://www.medplum.com/",
-  "bugs": {
-    "url": "https://github.com/medplum/medplum/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/medplum/medplum.git",
-    "directory": "packages/definitions"
-  },
   "license": "Apache-2.0",
-  "author": "Medplum <hello@medplum.com>",
   "sideEffects": false,
   "main": "dist/index.js",
   "files": [

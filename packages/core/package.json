@@ -1,9 +1,8 @@
 {
-  "name": "@medplum/core",
-  "version": "3.0.1",
-  "description": "Medplum TS/JS Library",
+  "name": "@rahulideas2it/fhir-sdc-lib-core",
+  "version": "0.0.0",
+  "description": "FHIR TS/JS Library",
   "keywords": [
-    "medplum",
     "fhir",
     "healthcare",
     "interoperability",
@@ -17,17 +16,7 @@
     "r4",
     "normative"
   ],
-  "homepage": "https://www.medplum.com/",
-  "bugs": {
-    "url": "https://github.com/medplum/medplum/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/medplum/medplum.git",
-    "directory": "packages/core"
-  },
   "license": "Apache-2.0",
-  "author": "Medplum <hello@medplum.com>",
   "sideEffects": false,
   "type": "module",
   "exports": {
@@ -54,9 +43,11 @@
     "clean": "rimraf dist",
     "test": "jest"
   },
+  "dependencies": {
+    "@medplum/definitions": "npm:@rahulideas2it/fhir-sdc-lib-definitions@*",
+    "@medplum/fhirtypes": "npm:@rahulideas2it/fhir-sdc-lib-fhirtypes@*"
+  },
   "devDependencies": {
-    "@medplum/definitions": "*",
-    "@medplum/fhirtypes": "*",
     "jest-websocket-mock": "2.5.0",
     "vite": "^5.0.12"
   },

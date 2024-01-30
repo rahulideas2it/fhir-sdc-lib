@@ -1,9 +1,8 @@
 {
-  "name": "@medplum/react-hooks",
-  "version": "3.0.1",
-  "description": "Medplum React Hooks Library",
+  "name": "@rahulideas2it/fhir-sdc-lib-react-hooks",
+  "version": "0.0.0",
+  "description": "React Hooks Library",
   "keywords": [
-    "medplum",
     "fhir",
     "healthcare",
     "interoperability",
@@ -21,17 +20,7 @@
     "react",
     "react-component"
   ],
-  "homepage": "https://www.medplum.com/",
-  "bugs": {
-    "url": "https://github.com/medplum/medplum/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/medplum/medplum.git",
-    "directory": "packages/react-hooks"
-  },
   "license": "Apache-2.0",
-  "author": "Medplum <hello@medplum.com>",
   "sideEffects": false,
   "exports": {
     "import": {
@@ -56,11 +45,13 @@
     "clean": "rimraf dist",
     "test": "jest"
   },
+  "dependencies": {
+    "@medplum/core": "npm:@rahulideas2it/fhir-sdc-lib-core@*",
+    "@medplum/definitions": "npm:@rahulideas2it/fhir-sdc-lib-definitions@*",
+    "@medplum/fhirtypes": "npm:@rahulideas2it/fhir-sdc-lib-fhirtypes@*",
+    "@medplum/mock": "npm:@rahulideas2it/fhir-sdc-lib-mock@*"
+  },
   "devDependencies": {
-    "@medplum/core": "*",
-    "@medplum/definitions": "*",
-    "@medplum/fhirtypes": "*",
-    "@medplum/mock": "*",
     "@testing-library/dom": "9.3.4",
     "@testing-library/jest-dom": "6.3.0",
     "@testing-library/react": "14.1.2",

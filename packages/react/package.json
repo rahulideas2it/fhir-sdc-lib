@@ -1,9 +1,8 @@
 {
-  "name": "@medplum/react",
-  "version": "3.0.1",
-  "description": "Medplum React Component Library",
+  "name": "@rahulideas2it/fhir-sdc-lib-react",
+  "version": "0.0.0",
+  "description": "React Component Library",
   "keywords": [
-    "medplum",
     "fhir",
     "healthcare",
     "interoperability",
@@ -21,17 +20,7 @@
     "react",
     "react-component"
   ],
-  "homepage": "https://www.medplum.com/",
-  "bugs": {
-    "url": "https://github.com/medplum/medplum/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/medplum/medplum.git",
-    "directory": "packages/react"
-  },
   "license": "Apache-2.0",
-  "author": "Medplum <hello@medplum.com>",
   "sideEffects": [
     "*.css"
   ],
@@ -60,21 +49,22 @@
   "scripts": {
     "api-extractor": "api-extractor run --local && cp dist/types.d.ts dist/cjs/index.d.ts && cp dist/types.d.ts dist/esm/index.d.ts",
     "build": "npm run clean && tsc && node esbuild.mjs && npm run api-extractor",
-    "chromatic": "chromatic --exit-zero-on-changes --build-script-name=storybook --exit-once-uploaded",
     "clean": "rimraf dist storybook-static",
     "dev": "storybook dev -p 6006",
     "storybook": "storybook build",
     "test": "jest"
   },
+  "dependencies": {
+    "@mantine/core": "^7.0.0",
+    "@mantine/hooks": "^7.0.0",
+    "@mantine/notifications": "^7.0.0",
+    "@medplum/core": "npm:@rahulideas2it/fhir-sdc-lib-core@*",
+    "@medplum/definitions": "npm:@rahulideas2it/fhir-sdc-lib-definitions@*",
+    "@medplum/fhirtypes": "npm:@rahulideas2it/fhir-sdc-lib-fhirtypes@*",
+    "@medplum/mock": "npm:@rahulideas2it/fhir-sdc-lib-mock@*",
+    "@medplum/react-hooks": "npm:@rahulideas2it/fhir-sdc-lib-react-hooks@*"
+  },
   "devDependencies": {
-    "@mantine/core": "7.5.0",
-    "@mantine/hooks": "7.5.0",
-    "@mantine/notifications": "7.5.0",
-    "@medplum/core": "*",
-    "@medplum/definitions": "*",
-    "@medplum/fhirtypes": "*",
-    "@medplum/mock": "*",
-    "@medplum/react-hooks": "*",
     "@storybook/addon-actions": "7.6.10",
     "@storybook/addon-essentials": "7.6.10",
     "@storybook/addon-links": "7.6.10",
@@ -106,24 +96,11 @@
     "typescript": "5.3.3"
   },
   "peerDependencies": {
-    "@mantine/core": "^7.0.0",
-    "@mantine/hooks": "^7.0.0",
-    "@mantine/notifications": "^7.0.0",
-    "@medplum/core": "*",
     "react": "^17.0.2 || ^18.0.0",
     "react-dom": "^17.0.2 || ^18.0.0",
     "rfc6902": "^5.0.1"
   },
   "peerDependenciesMeta": {
-    "@mantine/core": {
-      "optional": true
-    },
-    "@mantine/hooks": {
-      "optional": true
-    },
-    "@mantine/notifications": {
-      "optional": true
-    },
     "rfc6902": {
       "optional": true
     }

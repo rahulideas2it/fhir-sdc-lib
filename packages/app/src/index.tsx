@@ -31,6 +31,8 @@ export async function initApp(): Promise<void> {
   const medplum = new MedplumClient({
     baseUrl: config.baseUrl,
     clientId: config.clientId,
+    fhirBaseUrl: config.fhirBaseUrl,
+    fhirUrlPath: 'fhir/R4',
     cacheTime: 60000,
     autoBatchTime: 100,
     onUnauthenticated: () => {

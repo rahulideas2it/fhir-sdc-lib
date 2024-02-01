@@ -1,6 +1,6 @@
 {
   "name": "@rahulideas2it/fhir-sdc-lib-react",
-  "version": "0.0.0",
+  "version": "0.0.3",
   "description": "React Component Library",
   "keywords": [
     "fhir",
@@ -55,9 +55,6 @@
     "test": "jest"
   },
   "dependencies": {
-    "@mantine/core": "^7.0.0",
-    "@mantine/hooks": "^7.0.0",
-    "@mantine/notifications": "^7.0.0",
     "@medplum/core": "npm:@rahulideas2it/fhir-sdc-lib-core@*",
     "@medplum/definitions": "npm:@rahulideas2it/fhir-sdc-lib-definitions@*",
     "@medplum/fhirtypes": "npm:@rahulideas2it/fhir-sdc-lib-fhirtypes@*",
@@ -65,6 +62,9 @@
     "@medplum/react-hooks": "npm:@rahulideas2it/fhir-sdc-lib-react-hooks@*"
   },
   "devDependencies": {
+    "@mantine/core": "7.5.0",
+    "@mantine/hooks": "7.5.0",
+    "@mantine/notifications": "7.5.0",
     "@storybook/addon-actions": "7.6.10",
     "@storybook/addon-essentials": "7.6.10",
     "@storybook/addon-links": "7.6.10",
@@ -96,16 +96,25 @@
     "typescript": "5.3.3"
   },
   "peerDependencies": {
+    "@mantine/core": "^7.0.0",
+    "@mantine/hooks": "^7.0.0",
+    "@mantine/notifications": "^7.0.0",
     "react": "^17.0.2 || ^18.0.0",
     "react-dom": "^17.0.2 || ^18.0.0",
     "rfc6902": "^5.0.1"
   },
   "peerDependenciesMeta": {
+    "@mantine/core": {
+      "optional": true
+    },
+    "@mantine/hooks": {
+      "optional": true
+    },
+    "@mantine/notifications": {
+      "optional": true
+    },
     "rfc6902": {
       "optional": true
     }
-  },
-  "engines": {
-    "node": ">=18.0.0"
   }
 }

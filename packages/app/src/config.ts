@@ -1,4 +1,5 @@
 export interface MedplumAppConfig {
+  fhirBaseUrl?: string;
   baseUrl?: string;
   clientId?: string;
   googleClientId?: string;
@@ -7,6 +8,7 @@ export interface MedplumAppConfig {
 }
 
 const config: MedplumAppConfig = {
+  fhirBaseUrl: import.meta.env?.MEDPLUM_FHIR_BASE_URL,
   baseUrl: import.meta.env?.MEDPLUM_BASE_URL,
   clientId: import.meta.env?.MEDPLUM_CLIENT_ID,
   googleClientId: import.meta.env?.GOOGLE_CLIENT_ID,

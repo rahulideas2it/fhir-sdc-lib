@@ -37,6 +37,11 @@ export function Header(props: HeaderProps): JSX.Element {
   const [userMenuOpened, setUserMenuOpened] = useState(false);
   const { colorScheme, setColorScheme } = useMantineColorScheme();
 
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  // const seedDatabaseItems = () => {
+  //   medplum.seedDatabase();
+  // };
+
   return (
     <MantineAppShell.Header p={8} style={{ zIndex: 101 }}>
       <Group justify="space-between">
@@ -47,6 +52,7 @@ export function Header(props: HeaderProps): JSX.Element {
           {!props.headerSearchDisabled && (
             <HeaderSearchInput pathname={props.pathname} searchParams={props.searchParams} />
           )}
+          {/* <Button onClick={seedDatabaseItems}>Seed Database</Button> */}
         </Group>
 
         <Menu

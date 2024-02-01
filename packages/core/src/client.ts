@@ -25,8 +25,6 @@ import {
   Reference,
   Resource,
   ResourceType,
-  SearchParameter,
-  StructureDefinition,
   UserConfiguration,
   ValueSet,
 } from '@medplum/fhirtypes';
@@ -78,6 +76,12 @@ import {
   sleep,
 } from './utils';
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+/** @ts-ignore */
+// import getSeedStructureDefitions from './dump/structureDefinitions';
+// import getSearchParameter from './dump/searchParameter';
+// import getValueSet from './dump/valueSet';
+
 export const MEDPLUM_VERSION = import.meta.env.MEDPLUM_VERSION ?? '';
 export const DEFAULT_ACCEPT = ContentType.FHIR_JSON + ', */*; q=0.1';
 
@@ -107,6 +111,14 @@ export interface MedplumClientOptions {
    * Use this to point to a custom Medplum deployment.
    */
   baseUrl?: string;
+
+  /**
+   * FHIR server URL.
+   *
+   * Default value is https://api.medplum.com/
+   *
+   */
+  fhirBaseUrl?: string;
 
   /**
    * OAuth2 authorize URL.
@@ -498,13 +510,6 @@ export interface MailOptions {
   readonly attachments?: MailAttachment[];
 }
 
-interface SchemaGraphQLResponse {
-  readonly data: {
-    readonly StructureDefinitionList: StructureDefinition[];
-    readonly SearchParameterList: SearchParameter[];
-  };
-}
-
 interface RequestCacheEntry {
   readonly requestTime: number;
   readonly value: ReadablePromise<any>;
@@ -690,7 +695,9 @@ export class MedplumClient extends EventTarget {
     this.storage = options?.storage ?? new ClientStorage();
     this.createPdfImpl = options?.createPdf;
     this.baseUrl = ensureTrailingSlash(options?.baseUrl ?? DEFAULT_BASE_URL);
-    this.fhirBaseUrl = ensureTrailingSlash(concatUrls(this.baseUrl, options?.fhirUrlPath ?? 'fhir/R4/'));
+    this.fhirBaseUrl = ensureTrailingSlash(
+      concatUrls(options?.fhirBaseUrl || this.baseUrl, options?.fhirUrlPath ?? 'fhir/R4/')
+    );
     this.authorizeUrl = concatUrls(this.baseUrl, options?.authorizeUrl ?? 'oauth2/authorize');
     this.tokenUrl = concatUrls(this.baseUrl, options?.tokenUrl ?? 'oauth2/token');
     this.logoutUrl = concatUrls(this.baseUrl, options?.logoutUrl ?? 'oauth2/logout');
@@ -1596,61 +1603,48 @@ export class MedplumClient extends EventTarget {
     if (cached) {
       return cached.value;
     }
-
-    const promise = new ReadablePromise<void>(
-      (async () => {
-        const query = `{
-      StructureDefinitionList(name: "${resourceType}") {
-        resourceType,
-        name,
-        kind,
-        description,
-        type,
-        snapshot {
-          element {
-            id,
-            path,
-            definition,
-            min,
-            max,
-            base {
-              path,
-              min,
-              max
-            },
-            contentReference,
-            type {
-              code,
-              profile,
-              targetProfile
-            },
-            binding {
-              strength,
-              valueSet
-            }
-          }
-        }
+    return this.search('StructureDefinition', { name: resourceType }).then((result: any) => {
+      if (!result.entry?.length) {
+        throw new Error('StructureDefinition not found');
       }
-      SearchParameterList(base: "${resourceType}", _count: 100) {
-        base,
-        code,
-        type,
-        expression,
-        target
-      }
-    }`.replace(/\s+/g, ' ');
-
-        const response = (await this.graphql(query)) as SchemaGraphQLResponse;
-
-        indexStructureDefinitionBundle(response.data.StructureDefinitionList);
-
-        for (const searchParameter of response.data.SearchParameterList) {
-          indexSearchParameter(searchParameter);
+      indexStructureDefinitionBundle(result);
+      return this.search('SearchParameter', { base: resourceType, _count: 100 }).then((result: any) => {
+        if (!result.entry?.length) {
+          throw new Error('SearchParameter not found');
         }
-      })()
-    );
-    this.setCacheEntry(cacheKey, promise);
-    return promise;
+        for (const searchParameter of result.entry) {
+          indexSearchParameter(searchParameter?.resource);
+        }
+      });
+    });
+  }
+
+  seedDatabase(): any {
+    // Seed Structure Definition
+
+    // const entries = getSeedStructureDefitions();
+    // entries.forEach((item: any) => {
+    //   const promiseCreate = new ReadablePromise(this.createResource(item).then((res) => res));
+    //   console.log(promiseCreate);
+    // });
+
+    // Seed Search Parameter
+
+    // const entriess = getSearchParameter();
+    // entriess.forEach((item: any) => {
+    //   const promiseCreate = new ReadablePromise(this.createResource(item).then((res) => res));
+    //   console.log(promiseCreate);
+    // });
+
+    // Seed Value Sets
+
+    // const entriesss = getValueSet();
+    // entriesss.forEach((item: any) => {
+    //   const promiseCreate = new ReadablePromise(this.createResource(item).then((res) => res));
+    //   console.log(promiseCreate);
+    // });
+    alert('already seeded');
+    return 'done';
   }
 
   /**

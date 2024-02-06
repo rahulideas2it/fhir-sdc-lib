@@ -14,10 +14,11 @@ export interface ResourceFormProps {
   readonly schemaName?: string;
   /** (optional) URL of the resource profile used to display the form. Takes priority over schemaName. */
   readonly profileUrl?: string;
+  readonly customIgnoredProperties?: any[];
 }
 
 export function ResourceForm(props: ResourceFormProps): JSX.Element {
-  const { outcome } = props;
+  const { outcome, customIgnoredProperties } = props;
   const medplum = useMedplum();
   const defaultValue = useResource(props.defaultValue);
   const [schemaLoaded, setSchemaLoaded] = useState<string>();
@@ -65,12 +66,16 @@ export function ResourceForm(props: ResourceFormProps): JSX.Element {
       }}
     >
       <Stack mb="xl">
-        <FormSection title="Resource Type" htmlFor="resourceType" outcome={outcome}>
-          <TextInput name="resourceType" defaultValue={value.resourceType} disabled={true} />
-        </FormSection>
-        <FormSection title="ID" htmlFor="id" outcome={outcome}>
-          <TextInput name="id" defaultValue={value.id} disabled={true} />
-        </FormSection>
+        {!customIgnoredProperties?.includes('resourceType') && (
+          <FormSection title="Resource Type" htmlFor="resourceType" outcome={outcome}>
+            <TextInput name="resourceType" defaultValue={value.resourceType} disabled={true} />
+          </FormSection>
+        )}
+        {!customIgnoredProperties?.includes('id') && (
+          <FormSection title="ID" htmlFor="id" outcome={outcome}>
+            <TextInput name="id" defaultValue={value.id} disabled={true} />
+          </FormSection>
+        )}
       </Stack>
       <BackboneElementInput
         typeName={schemaLoaded}
@@ -78,6 +83,7 @@ export function ResourceForm(props: ResourceFormProps): JSX.Element {
         outcome={outcome}
         onChange={setValue}
         profileUrl={props.profileUrl}
+        customIgnoredProperties={props.customIgnoredProperties}
       />
       <Group justify="flex-end" mt="xl">
         <Button type="submit">OK</Button>

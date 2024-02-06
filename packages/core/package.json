@@ -1,6 +1,6 @@
 {
   "name": "@rahulideas2it/fhir-sdc-lib-core",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "FHIR TS/JS Library",
   "keywords": [
     "fhir",

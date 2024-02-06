@@ -19,10 +19,11 @@ export interface ElementsInputProps {
   readonly outcome: OperationOutcome | undefined;
   readonly onChange: ((value: any) => void) | undefined;
   readonly testId?: string;
+  readonly customIgnoredProperties?: any[];
 }
 
 export function ElementsInput(props: ElementsInputProps): JSX.Element {
-  const { elements } = props;
+  const { elements, customIgnoredProperties } = props;
   const [value, setValue] = useState<any>(props.defaultValue ?? {});
 
   const fixedProperties = useMemo(() => {
@@ -67,6 +68,8 @@ export function ElementsInput(props: ElementsInputProps): JSX.Element {
         } else if (IGNORED_PROPERTIES.has(key)) {
           return null;
         } else if (DEFAULT_IGNORED_NON_NESTED_PROPERTIES.includes(key) && element.path.split('.').length === 2) {
+          return null;
+        } else if (customIgnoredProperties && customIgnoredProperties?.includes(key)) {
           return null;
         }
 

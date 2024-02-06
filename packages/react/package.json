@@ -1,6 +1,6 @@
 {
   "name": "@rahulideas2it/fhir-sdc-lib-react",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "React Component Library",
   "keywords": [
     "fhir",
@@ -55,7 +55,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@medplum/core": "npm:@rahulideas2it/fhir-sdc-lib-core@*",
+    "@medplum/core": "npm:@rahulideas2it/fhir-sdc-lib-core@latest ",
     "@medplum/definitions": "npm:@rahulideas2it/fhir-sdc-lib-definitions@*",
     "@medplum/fhirtypes": "npm:@rahulideas2it/fhir-sdc-lib-fhirtypes@*",
     "@medplum/mock": "npm:@rahulideas2it/fhir-sdc-lib-mock@*",

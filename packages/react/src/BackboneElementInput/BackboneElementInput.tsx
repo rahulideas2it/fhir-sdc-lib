@@ -15,6 +15,8 @@ export interface BackboneElementInputProps {
   readonly onChange?: (value: any) => void;
   /** (optional) Profile URL of the structure definition represented by the backbone element */
   readonly profileUrl?: string;
+  /** (optional) Ignore custom properties on displaying form */
+  readonly customIgnoredProperties?: any[];
 }
 
 export function BackboneElementInput(props: BackboneElementInputProps): JSX.Element {
@@ -47,6 +49,7 @@ export function BackboneElementInput(props: BackboneElementInputProps): JSX.Elem
         defaultValue={value}
         onChange={setValueWrapper}
         outcome={props.outcome}
+        customIgnoredProperties={props.customIgnoredProperties}
       />
     </BackboneElementContext.Provider>
   );

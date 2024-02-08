@@ -30,6 +30,7 @@ export interface QuestionnaireBuilderProps {
   readonly questionnaire: Partial<Questionnaire> | Reference<Questionnaire>;
   readonly onSubmit: (result: Questionnaire) => void;
   readonly autoSave?: boolean;
+  readonly valueRef?: any;
 }
 
 export function QuestionnaireBuilder(props: QuestionnaireBuilderProps): JSX.Element | null {
@@ -39,6 +40,10 @@ export function QuestionnaireBuilder(props: QuestionnaireBuilderProps): JSX.Elem
   const [value, setValue] = useState<Questionnaire>();
   const [selectedKey, setSelectedKey] = useState<string>();
   const [hoverKey, setHoverKey] = useState<string>();
+
+  useEffect(() => {
+    props.valueRef.current = value;
+  }, [props.valueRef, value]);
 
   function handleDocumentMouseOver(): void {
     setHoverKey(undefined);

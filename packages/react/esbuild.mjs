@@ -5,6 +5,7 @@
 import dotenv from 'dotenv';
 import esbuild from 'esbuild';
 import { writeFileSync } from 'fs';
+import CssModulesPlugin from 'esbuild-css-modules-plugin';
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ const options = {
   minifyIdentifiers: false,
   minifySyntax: true,
   sourcemap: true,
+  plugins: [CssModulesPlugin()],
   define: {
     'import.meta.env.NODE_ENV': '"production"',
     'import.meta.env.GOOGLE_AUTH_ORIGINS': `"${process.env.GOOGLE_AUTH_ORIGINS}"`,

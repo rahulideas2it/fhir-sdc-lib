@@ -42,7 +42,9 @@ export function QuestionnaireBuilder(props: QuestionnaireBuilderProps): JSX.Elem
   const [hoverKey, setHoverKey] = useState<string>();
 
   useEffect(() => {
-    props.valueRef.current = value;
+    if (props.valueRef) {
+      props.valueRef.current = value;
+    }
   }, [props.valueRef, value]);
 
   function handleDocumentMouseOver(): void {

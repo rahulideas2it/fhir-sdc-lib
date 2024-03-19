@@ -25,6 +25,8 @@ import {
   setQuestionnaireItemReferenceTargetTypes,
 } from '../utils/questionnaire';
 import classes from './QuestionnaireBuilder.module.css';
+import { useDisclosure } from '@mantine/hooks';
+import { QuestionnaireResourceInput } from '../QuestionnaireResourceInput/QuestionnaireResourceInput';
 
 export interface QuestionnaireBuilderProps {
   readonly questionnaire: Partial<Questionnaire> | Reference<Questionnaire>;
@@ -40,6 +42,7 @@ export function QuestionnaireBuilder(props: QuestionnaireBuilderProps): JSX.Elem
   const [value, setValue] = useState<Questionnaire>();
   const [selectedKey, setSelectedKey] = useState<string>();
   const [hoverKey, setHoverKey] = useState<string>();
+  const [templateOpened, { open: openTemplate, close: closeTemplate }] = useDisclosure(false);
 
   useEffect(() => {
     if (props?.onChangeCallback) {
@@ -48,11 +51,17 @@ export function QuestionnaireBuilder(props: QuestionnaireBuilderProps): JSX.Elem
   }, [props, value]);
 
   function handleDocumentMouseOver(): void {
-    setHoverKey(undefined);
+    const modelOpened = document?.getElementById?.('chooseTemplate-body');
+    if (!modelOpened) {
+      setHoverKey(undefined);
+    }
   }
 
   function handleDocumentClick(): void {
-    setSelectedKey(undefined);
+    const modelOpened = document?.getElementById?.('chooseTemplate-body');
+    if (!modelOpened) {
+      setSelectedKey(undefined);
+    }
   }
 
   useEffect(() => {
@@ -83,6 +92,15 @@ export function QuestionnaireBuilder(props: QuestionnaireBuilderProps): JSX.Elem
     return null;
   }
 
+  const onModalSubmit = (questionnaireJSON: QuestionnaireItem[]): void => {
+    closeTemplate();
+    console.log(questionnaireJSON);
+    handleChange({
+      ...value,
+      item: [...(value.item ?? []), ...questionnaireJSON],
+    });
+  };
+
   return (
     <div>
       <Form testid="questionnaire-form" onSubmit={() => props.onSubmit(value)}>
@@ -93,6 +111,14 @@ export function QuestionnaireBuilder(props: QuestionnaireBuilderProps): JSX.Elem
           hoverKey={hoverKey}
           setHoverKey={setHoverKey}
           onChange={handleChange}
+          openTemplate={openTemplate}
+        />
+        <QuestionnaireResourceInput
+          templateOpened={templateOpened}
+          closeTemplate={closeTemplate}
+          generateId={generateId}
+          generateLinkId={generateLinkId}
+          onModalSubmit={onModalSubmit}
         />
         <Button type="submit">Save</Button>
       </Form>
@@ -113,6 +139,7 @@ interface ItemBuilderProps<T extends Questionnaire | QuestionnaireItem> {
   readonly onRepeatable?: (item: QuestionnaireItem) => void;
   onMoveUp?(): void;
   onMoveDown?(): void;
+  openTemplate?(): void;
 }
 
 function ItemBuilder<T extends Questionnaire | QuestionnaireItem>(props: ItemBuilderProps<T>): JSX.Element {
@@ -250,6 +277,7 @@ function ItemBuilder<T extends Questionnaire | QuestionnaireItem>(props: ItemBui
             onRepeatable={toggleRepeatable}
             onMoveUp={() => moveItem(i, -1)}
             onMoveDown={() => moveItem(i, 1)}
+            openTemplate={props?.openTemplate}
           />
         </div>
       ))}
@@ -359,6 +387,26 @@ function ItemBuilder<T extends Questionnaire | QuestionnaireItem>(props: ItemBui
               }}
             >
               Add group
+            </Anchor>
+            <Anchor
+              href="#"
+              onClick={(e: MouseEvent) => {
+                e.preventDefault();
+                if (props?.openTemplate) {
+                  props?.openTemplate();
+                  // addItem(
+                  //   {
+                  //     id: generateId(),
+                  //     linkId: generateLinkId('g'),
+                  //     type: 'group',
+                  //     text: 'Group',
+                  //   } as QuestionnaireItem,
+                  //   true
+                  // );
+                }
+              }}
+            >
+              Add Template
             </Anchor>
           </>
         )}

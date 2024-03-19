@@ -280,7 +280,7 @@ function buildInitialResponseItems(items: QuestionnaireItem[] | undefined): Ques
 
 export function buildInitialResponseItem(item: QuestionnaireItem): QuestionnaireResponseItem {
   return {
-    id: generateId(),
+    id: item.id,
     linkId: item.linkId,
     text: item.text,
     item: buildInitialResponseItems(item.item),
@@ -288,10 +288,10 @@ export function buildInitialResponseItem(item: QuestionnaireItem): Questionnaire
   };
 }
 
-let nextId = 1;
-function generateId(): string {
-  return 'id-' + nextId++;
-}
+// let nextId = 1;
+// function generateId(): string {
+//   return 'id-' + nextId++;
+// }
 
 function buildInitialResponseAnswer(answer: QuestionnaireItemInitial): QuestionnaireResponseItemAnswer {
   // This works because QuestionnaireItemInitial and QuestionnaireResponseItemAnswer

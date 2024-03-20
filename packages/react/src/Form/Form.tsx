@@ -6,12 +6,14 @@ export interface FormProps {
   readonly style?: CSSProperties;
   readonly children?: ReactNode;
   readonly testid?: string;
+  readonly id?: string;
 }
 
 export function Form(props: FormProps): JSX.Element {
   return (
     <form
       style={props.style}
+      id={props?.id}
       data-testid={props.testid}
       onSubmit={(e: SyntheticEvent) => {
         e.preventDefault();

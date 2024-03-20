@@ -56,6 +56,7 @@ export function ResourceForm(props: ResourceFormProps): JSX.Element {
 
   return (
     <form
+      id="resourceForm"
       noValidate
       autoComplete="off"
       onSubmit={(e: FormEvent) => {

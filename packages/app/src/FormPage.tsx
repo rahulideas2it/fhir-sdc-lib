@@ -1,5 +1,5 @@
 import { Box, Paper, Text, Title } from '@mantine/core';
-import { createReference, getDisplayString, getPropertyDisplayName, getReferenceString } from '@medplum/core';
+import { createReference, getDisplayString, getReferenceString } from '@medplum/core';
 import {
   Bundle,
   BundleEntry,
@@ -8,7 +8,7 @@ import {
   QuestionnaireResponse,
   Resource,
 } from '@medplum/fhirtypes';
-import { Document, Loading, MedplumLink, QuestionnaireForm, QuestionnaireItemType, useMedplum } from '@medplum/react';
+import { Document, Loading, MedplumLink, QuestionnaireForm, useMedplum } from '@medplum/react';
 import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { PatientHeader } from './components/PatientHeader';
@@ -120,39 +120,6 @@ export function FormPage(): JSX.Element {
     return <Loading />;
   }
 
-  const getAnswerType = (type: string): string => {
-    switch (type) {
-      case 'boolean':
-        return 'valueBoolean';
-      case 'date':
-        return 'valueDate';
-    }
-    return '';
-  };
-
-  const mapQResponseToFHIR = (QResponse: QuestionnaireResponse, mappingRef: any): any => {
-    if (!QResponse?.item?.length) {
-      return null;
-    } else {
-      for (const qResponseItem of QResponse.item) {
-        if (qResponseItem.id?.includes('$')) {
-          const [resourceName, itemType, itemKey] = qResponseItem.id.split('$');
-          if (qResponseItem.answer?.length) {
-            if (!(resourceName in mappingRef)) {
-              mappingRef[resourceName] = {};
-            }
-            const currentAnswer: any = qResponseItem.answer?.[0];
-            if (qResponseItem.text) {
-              mappingRef[resourceName][itemKey] = currentAnswer?.[getAnswerType(itemType)];
-            }
-          }
-        }
-      }
-    }
-
-    return null;
-  };
-
   const patient = subject && getPatient(subject);
 
   return (
@@ -172,32 +139,32 @@ export function FormPage(): JSX.Element {
           questionnaire={questionnaire}
           subject={subject && createReference(subject)}
           onSubmit={handleSubmit}
+          getQFHIRResource={getQFHIRResource}
         />
       </Document>
     </>
   );
 
   async function handleSubmit(questionnaireResponse: QuestionnaireResponse): Promise<void> {
-    console.log(questionnaire, questionnaireResponse);
-    const mappingRef: any = {};
-    mapQResponseToFHIR(questionnaireResponse, mappingRef);
-    console.log(mappingRef);
+    const responses = [] as QuestionnaireResponse[];
+    if (!subjectList || subjectList.length === 0) {
+      // If there is no subject, then simply submit the questionnaire response.
+      responses.push(await medplum.createResource(questionnaireResponse));
+    } else {
+      // Otherwise submit one questionnaire response for each subject ID.
+      for (const subjectId of subjectList) {
+        responses.push(
+          await medplum.createResource({
+            ...questionnaireResponse,
+            subject: { reference: subjectId },
+          })
+        );
+      }
+    }
+    setResult(responses);
+  }
 
-    // const responses = [] as QuestionnaireResponse[];
-    // if (!subjectList || subjectList.length === 0) {
-    //   // If there is no subject, then simply submit the questionnaire response.
-    //   responses.push(await medplum.createResource(questionnaireResponse));
-    // } else {
-    //   // Otherwise submit one questionnaire response for each subject ID.
-    //   for (const subjectId of subjectList) {
-    //     responses.push(
-    //       await medplum.createResource({
-    //         ...questionnaireResponse,
-    //         subject: { reference: subjectId },
-    //       })
-    //     );
-    //   }
-    // }
-    // setResult(responses);
+  function getQFHIRResource(mappingRef: any): void {
+    console.log(mappingRef);
   }
 }

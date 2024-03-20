@@ -16,13 +16,14 @@ export interface ResourceTableProps {
 }
 
 export function QuestionnaireResourceInput(props: ResourceTableProps): JSX.Element | null {
-  const [resourceData, setResourceData] = useState<any>([
+  const initialState = [
     {
       resourceName: '',
       fields: [],
       options: [],
     },
-  ]);
+  ];
+  const [resourceData, setResourceData] = useState<any>(initialState);
   const CUSTOM_IGNORED_PROPERTIES = ['url', 'id', 'identifier', 'version', 'title', 'subtile'];
   const medplum = useMedplum();
   const [schemaLoaded, setSchemaLoaded] = useState(false);
@@ -171,23 +172,19 @@ export function QuestionnaireResourceInput(props: ResourceTableProps): JSX.Eleme
           }
         });
         props.onModalSubmit(questionnaireJSON);
-        console.log(questionnaireJSON);
       }
     }
+    setResourceData(initialState);
   };
 
   return (
-    // <BackboneElementDisplay
-    //   value={{
-    //     type: value.resourceType,
-    //     value: props.forceUseInput ? props.value : value,
-    //   }}
-    //   ignoreMissingValues={props.ignoreMissingValues}
-    // />
     <Modal
       centered
       opened={props.templateOpened}
-      onClose={props.closeTemplate}
+      onClose={() => {
+        setResourceData(initialState);
+        props.closeTemplate();
+      }}
       title="Choose Template"
       id="chooseTemplate"
       size="xl"

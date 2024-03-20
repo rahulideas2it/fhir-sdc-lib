@@ -21,6 +21,8 @@ export interface QuestionnaireFormProps {
   readonly encounter?: Reference<Encounter>;
   readonly submitButtonText?: string;
   readonly onSubmit: (response: QuestionnaireResponse) => void;
+  readonly getQFHIRResource?: (mappingRef: any) => void;
+  readonly previewMode?: boolean;
 }
 
 export function QuestionnaireForm(props: QuestionnaireFormProps): JSX.Element | null {
@@ -71,20 +73,78 @@ export function QuestionnaireForm(props: QuestionnaireFormProps): JSX.Element | 
   const nextStep = (): void => setActivePage((current) => current + 1);
   const prevStep = (): void => setActivePage((current) => current - 1);
 
+  const getAnswerType = (type: string): string => {
+    switch (type) {
+      case 'boolean':
+        return 'valueBoolean';
+      case 'date':
+        return 'valueDate';
+      case 'string':
+        return 'valueString';
+      case 'decimal':
+        return 'valueDecimal';
+      case 'integer':
+        return 'valueInteger';
+      case 'url':
+        return 'valueUrl';
+      case 'dateTime':
+        return 'valueDateTime';
+      case 'referene':
+        return 'valueReference';
+      case 'quantity':
+        return 'valueQuantity';
+      case 'attachment':
+        return 'valueAttachment';
+      case 'text':
+        return 'valueText';
+    }
+    return '';
+  };
+
+  const mapQResponseToFHIR = (QResponse: QuestionnaireResponse, mappingRef: any): any => {
+    if (!QResponse?.item?.length) {
+      return null;
+    } else {
+      for (const qResponseItem of QResponse.item) {
+        if (qResponseItem.id?.includes('$')) {
+          const [resourceName, itemType, itemKey] = qResponseItem.id.split('$');
+          if (qResponseItem.answer?.length) {
+            if (!(resourceName in mappingRef)) {
+              mappingRef[resourceName] = {};
+            }
+            const currentAnswer: any = qResponseItem.answer?.[0];
+            if (qResponseItem.text) {
+              mappingRef[resourceName][itemKey] = currentAnswer?.[getAnswerType(itemType)];
+            }
+          }
+        }
+      }
+    }
+
+    return null;
+  };
+
   return (
     <QuestionnaireFormContext.Provider value={{ subject: props.subject, encounter: props.encounter }}>
       <Form
+        id={props.previewMode ? 'questionnaire-form-preview' : 'questionnaire-form'}
         testid="questionnaire-form"
         onSubmit={() => {
-          if (props.onSubmit && response) {
-            props.onSubmit({
+          if (!props.previewMode && props.onSubmit && response) {
+            const questionnaireResponse: QuestionnaireResponse = {
               ...response,
               questionnaire: getReferenceString(questionnaire),
-              subject: props.subject,
-              source: createReference(source as ProfileResource),
+              subject: props.subject || {},
+              source: source ? createReference(source as ProfileResource) : {},
               authored: new Date().toISOString(),
               status: 'completed',
-            });
+            };
+            if (props.getQFHIRResource) {
+              const mappingRef: any = {};
+              mapQResponseToFHIR(questionnaireResponse, mappingRef);
+              props.getQFHIRResource(mappingRef);
+            }
+            props.onSubmit(questionnaireResponse);
           }
         }}
       >

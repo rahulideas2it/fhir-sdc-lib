@@ -394,15 +394,6 @@ function ItemBuilder<T extends Questionnaire | QuestionnaireItem>(props: ItemBui
                 e.preventDefault();
                 if (props?.openTemplate) {
                   props?.openTemplate();
-                  // addItem(
-                  //   {
-                  //     id: generateId(),
-                  //     linkId: generateLinkId('g'),
-                  //     type: 'group',
-                  //     text: 'Group',
-                  //   } as QuestionnaireItem,
-                  //   true
-                  // );
                 }
               }}
             >
